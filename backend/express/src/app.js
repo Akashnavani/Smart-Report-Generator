@@ -22,7 +22,7 @@ app.use(helmet());
 
 // 2. Strict CORS policy
 const allowedOrigins = [
-    "http://localhost:300", 
+    "http://localhost:3000", 
     "https://msr-frontend-754411699176.us-central1.run.app"
 ];
 app.use(cors({
