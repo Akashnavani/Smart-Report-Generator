@@ -1,0 +1,1319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MSR Insight Backend Interview Prep</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 17mm 15mm 18mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      color: #20242a;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      margin: 0;
+      background: #ffffff;
+    }
+
+    main {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    h1, h2, h3, h4 {
+      color: #111827;
+      line-height: 1.25;
+      margin: 1.35em 0 0.45em;
+      page-break-after: avoid;
+    }
+
+    h1 {
+      font-size: 25pt;
+      text-align: center;
+      border-bottom: 2px solid #1f4e79;
+      padding-bottom: 9px;
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 17pt;
+      border-bottom: 1px solid #d6dde7;
+      padding-bottom: 5px;
+      margin-top: 1.65em;
+    }
+
+    h3 {
+      font-size: 13pt;
+      color: #1f4e79;
+    }
+
+    h4 {
+      font-size: 11.5pt;
+      color: #334155;
+    }
+
+    p {
+      margin: 0.45em 0 0.75em;
+      orphans: 3;
+      widows: 3;
+    }
+
+    strong {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.92em;
+      background: #eef3f8;
+      color: #132f4c;
+      border-radius: 3px;
+      padding: 0.08em 0.25em;
+    }
+
+    pre {
+      background: #f7f9fc;
+      border: 1px solid #d8e1eb;
+      border-radius: 6px;
+      padding: 10px 12px;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: transparent;
+      color: #1f2937;
+      padding: 0;
+      font-size: 9.5pt;
+    }
+
+    ul, ol {
+      margin: 0.3em 0 0.85em 1.35em;
+      padding: 0;
+    }
+
+    li {
+      margin: 0.22em 0;
+      padding-left: 0.1em;
+    }
+
+    .table-wrap {
+      margin: 0.85em 0 1.1em;
+      page-break-inside: avoid;
+      overflow: hidden;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 9.4pt;
+    }
+
+    th {
+      background: #eaf1f8;
+      color: #111827;
+      font-weight: 700;
+    }
+
+    th, td {
+      border: 1px solid #cfd8e3;
+      padding: 6px 7px;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background: #fafbfd;
+    }
+
+    blockquote {
+      border-left: 4px solid #1f4e79;
+      margin: 0.9em 0;
+      padding: 0.2em 0 0.2em 0.9em;
+      color: #374151;
+      background: #f7fafc;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #d6dde7;
+      margin: 1.25em 0;
+    }
+
+    .qa-label {
+      margin-top: 0.9em;
+      page-break-after: avoid;
+      font-size: 9pt;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .question-label {
+      color: #173f5f;
+    }
+
+    .answer-label {
+      color: #46505a;
+    }
+
+    .question-text {
+      font-weight: 800;
+      color: #101820;
+      background: #f2f6fb;
+      border-left: 3px solid #1f4e79;
+      padding: 7px 9px;
+      margin-top: 0.2em;
+      page-break-inside: avoid;
+    }
+
+    .answer-text {
+      margin-left: 0;
+    }
+
+    a {
+      color: #1f4e79;
+      text-decoration: none;
+    }
+
+    @media print {
+      h2 {
+        break-before: auto;
+      }
+
+      h3, .qa-label, .question-text, table, pre {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+<h1 id="msr-insight-backend-interview-prep">MSR Insight Backend Interview Prep</h1>
+<p>This document is written for a backend-focused interview. It is based on the actual repository, not generic interview material.</p>
+<p>Use the tone in the answers as your speaking style: confident, practical, and honest about tradeoffs.</p>
+<h2 id="1-backend-project-analysis">1. Backend Project Analysis</h2>
+<h3 id="one-line-backend-summary">One-Line Backend Summary</h3>
+<p>MSR Insight is an academic reporting and proctoring platform where an Express.js gateway manages auth, sessions, database access, scraping, reports, and parent communication, while a FastAPI intelligence service handles AI remarks and RAG-based proctor chat over student academic data.</p>
+<h3 id="actual-backend-architecture">Actual Backend Architecture</h3>
+<p>The repo has two backend services:</p>
+<ul><li><code>backend/express</code>: primary <strong>API gateway</strong> and business backend.</li>
+<li><code>backend/fastapi</code>: AI and <strong>RAG</strong> service.</li></ul>
+<p>The frontend and Chrome extension consume these services, but your backend story should center on Express, FastAPI, Redis, PostgreSQL, Prisma, Puppeteer, and external AI/reporting integrations.</p>
+<h3 id="runtime-components">Runtime Components</h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Component</th><th style="text-align:left">Role</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Express</strong> app</td><td style="text-align:left">Main <strong>API gateway</strong>, route orchestration, <strong>auth</strong>, <strong>sessions</strong>, scraping, reports</td></tr>
+<tr><td style="text-align:left"><strong>FastAPI</strong> app</td><td style="text-align:left">AI remark generation and <strong>RAG</strong> chatbot</td></tr>
+<tr><td style="text-align:left"><strong>PostgreSQL</strong></td><td style="text-align:left">Main data store, including <strong>JSONB</strong> student academic data</td></tr>
+<tr><td style="text-align:left"><strong>Prisma</strong></td><td style="text-align:left"><strong>ORM</strong> used by <strong>Express</strong> for core relational operations</td></tr>
+<tr><td style="text-align:left"><strong>Redis</strong></td><td style="text-align:left"><strong>Session</strong> store using opaque <strong>session</strong> IDs</td></tr>
+<tr><td style="text-align:left"><strong>Puppeteer</strong> + <strong>Cheerio</strong></td><td style="text-align:left">Login to college parent portal, scrape academic pages, normalize data</td></tr>
+<tr><td style="text-align:left"><strong>PGVector</strong></td><td style="text-align:left"><strong>Vector store</strong> for <strong>RAG</strong> chunks inside <strong>Postgres</strong></td></tr>
+<tr><td style="text-align:left"><strong>Groq</strong></td><td style="text-align:left"><strong>LLM</strong> provider for AI remarks</td></tr>
+<tr><td style="text-align:left"><strong>Gemini</strong></td><td style="text-align:left"><strong>Embeddings</strong> and <strong>RAG</strong> chat model in <strong>FastAPI</strong></td></tr>
+<tr><td style="text-align:left"><strong>Resend</strong></td><td style="text-align:left">Parent email delivery</td></tr>
+<tr><td style="text-align:left"><strong>Cloudinary</strong></td><td style="text-align:left">PDF report archival</td></tr>
+<tr><td style="text-align:left"><strong>Twilio</strong> <strong>WhatsApp</strong></td><td style="text-align:left">Optional <strong>WhatsApp</strong> dispatch</td></tr>
+<tr><td style="text-align:left"><strong>Chrome extension</strong></td><td style="text-align:left">Batch scrape trigger for proctor <strong>sessions</strong></td></tr></tbody></table></div>
+<h3 id="express-request-lifecycle">Express Request Lifecycle</h3>
+<ol><li>Request enters <code>backend/express/server.js</code>.</li>
+<li><code>server.js</code> imports <code>src/app.js</code> and starts listening on <code>process.env.PORT || 5000</code>.</li>
+<li><code>app.js</code> applies:</li></ol>
+<ul><li><code>cors()</code></li>
+<li><code>express.json()</code></li>
+<li><code>/api/health</code></li>
+<li>route mounts for <strong>auth</strong>, report, proctor, notifications, students, admin</li>
+<li>global error middleware</li></ul>
+<ol><li>Protected routes call <code>requireSession</code>.</li>
+<li><code>requireSession</code> reads <code>x-session-id</code>, checks <strong>Redis</strong>, attaches <code>req.user</code>, refreshes the <strong>session</strong> <strong>TTL</strong>, and continues.</li>
+<li>Controllers validate basic inputs, call services/repositories, and return JSON.</li></ol>
+<h3 id="express-route-map">Express Route Map</h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Base route</th><th style="text-align:left">File</th><th style="text-align:left">Main purpose</th><th style="text-align:left">Auth status</th></tr></thead><tbody><tr><td style="text-align:left"><code>/api/auth</code></td><td style="text-align:left"><code>auth.routes.js</code></td><td style="text-align:left">student/proctor login, register, logout, profile</td><td style="text-align:left">login/register public; profile/logout check header inside controller</td></tr>
+<tr><td style="text-align:left"><code>/api/report</code></td><td style="text-align:left"><code>report.routes.js</code></td><td style="text-align:left">dashboard data, AI report, manual scrape update, email/<strong>WhatsApp</strong> report</td><td style="text-align:left"><code>requireSession</code> on main routes</td></tr>
+<tr><td style="text-align:left"><code>/api/proctor</code></td><td style="text-align:left"><code>proctor.routes.js</code></td><td style="text-align:left">proctor dashboard, proctee detail, scrape list, notifications, chat</td><td style="text-align:left">router-level <strong>session</strong> check</td></tr>
+<tr><td style="text-align:left"><code>/api/notifications</code></td><td style="text-align:left"><code>notification.routes.js</code></td><td style="text-align:left">attendance alerts</td><td style="text-align:left">router-level <strong>session</strong> check</td></tr>
+<tr><td style="text-align:left"><code>/api/students</code></td><td style="text-align:left"><code>students.js</code></td><td style="text-align:left">sync normalized student data</td><td style="text-align:left">public</td></tr>
+<tr><td style="text-align:left"><code>/api/admin</code></td><td style="text-align:left"><code>admin.routes.js</code></td><td style="text-align:left">proctor <strong>CRUD</strong>, assignments, parent data, stats</td><td style="text-align:left">public in backend</td></tr></tbody></table></div>
+<p>Important interview detail: the project does not use JWT. It uses Redis-backed opaque session IDs passed in the custom <code>x-session-id</code> header.</p>
+<h3 id="authentication-and-session-flow">Authentication And Session Flow</h3>
+<p>Student login:</p>
+<ol><li>Frontend sends USN and DOB to <code>POST /api/auth/login</code>.</li>
+<li><code>auth.controller.login</code> validates required fields.</li>
+<li><code>auth.service.login</code> uses <code>userRepository.findByCredentials</code>.</li>
+<li>DOB is normalized through <code>formatDOB</code> inside <code>userRepository.findByCredentials</code>.</li>
+<li>If the student is missing, the service attempts a <strong>Puppeteer</strong> scrape and sync.</li>
+<li>A <strong>UUID</strong> <strong>session</strong> ID is generated.</li>
+<li><strong>Redis</strong> stores:</li></ol>
+<ul><li><code>session:&lt;uuid&gt;</code> -&gt; <code>student:&lt;USN&gt;</code></li>
+<li><code>usn:&lt;USN&gt;</code> -&gt; <code>&lt;sessionId&gt;</code></li></ul>
+<ol><li><strong>Session</strong> <strong>TTL</strong> is 30 days.</li></ol>
+<p>Proctor login:</p>
+<ol><li>Frontend sends proctor ID and password to <code>POST /api/auth/proctor-login</code>.</li>
+<li>Proctor ID is uppercased.</li>
+<li><strong>Prisma</strong> fetches the proctor record.</li>
+<li><code>bcrypt.compare</code> validates password.</li>
+<li>Existing <strong>Redis</strong> <strong>session</strong> is reused if present.</li>
+<li>Otherwise a new <strong>UUID</strong> <strong>session</strong> is created.</li>
+<li>Login triggers <code>notifyRagSync()</code> to ask <strong>FastAPI</strong> to sync vector data.</li></ol>
+<p>Session middleware:</p>
+<ul><li>Reads <code>x-session-id</code>.</li>
+<li>Looks up <code>session:&lt;id&gt;</code> in <strong>Redis</strong>.</li>
+<li>Splits identity into role and ID.</li>
+<li>Attaches <code>req.user</code>, <code>req.userId</code>, and <code>req.userRole</code>.</li>
+<li>Refreshes the <strong>session</strong> <strong>TTL</strong>.</li></ul>
+<p>Strong answer to remember:</p>
+<p>&quot;I used Redis-backed opaque sessions instead of JWT here. The upside is server-side invalidation and simple logout. The tradeoff is that Redis becomes part of the auth path, so production needs Redis HA, better session key lifecycle, and role/ownership checks.&quot;</p>
+<h3 id="authorization-reality">Authorization Reality</h3>
+<p>This is a major interview point.</p>
+<p>Current backend only verifies that a session exists for many protected routes. It does not consistently verify:</p>
+<ul><li>whether the <strong>session</strong> role is student or proctor,</li>
+<li>whether <code>req.user.id</code> matches <code>:proctorId</code>,</li>
+<li>whether a student can access only their own <code>:usn</code>,</li>
+<li>whether admin routes are backend-protected.</li></ul>
+<p>Examples:</p>
+<ul><li><code>/api/proctor/:proctorId/dashboard</code> accepts any valid <strong>session</strong>, but should require a proctor <strong>session</strong> matching <code>proctorId</code>.</li>
+<li><code>/api/report/:usn</code> accepts any valid <strong>session</strong>, but should restrict student access to their own USN and proctor access to assigned students.</li>
+<li><code>/api/admin/*</code> is public on the backend; the frontend uses a client-side <code>admin123</code> password, which is not production-grade security.</li>
+<li><strong>FastAPI</strong> <strong>RAG</strong> endpoints are directly callable from the frontend and trust <code>proctor_id</code> from the request body.</li></ul>
+<p>Say this honestly in interviews:</p>
+<p>&quot;The authentication mechanism is implemented, but authorization is the area I would harden first before production. I would add role-based middleware and ownership checks around proctor, student, report, admin, and FastAPI RAG endpoints.&quot;</p>
+<h3 id="database-design">Database Design</h3>
+<p>Prisma schema:</p>
+<ul><li><code>Student</code></li>
+<li><strong>primary key</strong>: <code>usn</code></li>
+<li>columns: name, dob, phone, email, current_year, details <strong>JSONB</strong></li>
+<li>relations: parents, proctor maps</li></ul>
+<ul><li><code>Proctor</code></li>
+<li><strong>primary key</strong>: <code>proctor_id</code></li>
+<li>password hash</li>
+<li>relations: student maps</li></ul>
+<ul><li><code>Parent</code></li>
+<li>composite key: <code>(usn, relation)</code></li>
+<li>belongs to student</li></ul>
+<ul><li><code>ProctorStudentMap</code></li>
+<li>maps proctor to student for an academic year</li>
+<li>unique key: <code>(student_id, academic_year)</code></li>
+<li>enforces one proctor per student per academic year</li></ul>
+<p>Why JSONB:</p>
+<p>The scraper data is semi-structured and can change when the college portal changes. JSONB gives flexibility for subjects, attendance, CIE marks, and exam history without constantly changing relational tables.</p>
+<p>Tradeoff:</p>
+<p>JSONB is easy to store and return to the frontend, but harder to query, index, validate, and aggregate. For production analytics, frequently queried fields like attendance percentage, subject code, SGPA, and last sync time should eventually move into relational tables or materialized summaries.</p>
+<h3 id="db-query-and-indexing-notes">DB Query And Indexing Notes</h3>
+<p>Good current choices:</p>
+<ul><li><strong>Primary key</strong> on <code>students.usn</code>.</li>
+<li><strong>Primary key</strong> on <code>proctors.proctor_id</code>.</li>
+<li>Composite key on parent <code>(usn, relation)</code>.</li>
+<li>Unique constraint on <code>proctor_student_map(student_id, academic_year)</code>.</li></ul>
+<p>Likely improvement:</p>
+<ul><li>Add composite <strong>index</strong> on <code>proctor_student_map(proctor_id, academic_year)</code> because proctor dashboard and notifications query by proctor and academic year.</li>
+<li>Consider <strong>GIN index</strong> or extracted columns for <strong>JSONB</strong> if backend starts filtering by attendance/marks inside <code>details</code>.</li>
+<li>Use <strong>transactions</strong> for bulk assignment and multi-step deletes.</li></ul>
+<p>Actual issue to revise:</p>
+<p><code>removeStudent</code> in <code>admin.controller.js</code> calculates <code>normalizedProctorId</code> but deletes by <code>(student_id, academic_year)</code> only. That can remove a student's assignment even if the URL proctor ID is not the assigned proctor.</p>
+<h3 id="scraping-and-data-sync-flow">Scraping And Data Sync Flow</h3>
+<p>The scraper is in <code>puppeteerScraper.service.js</code>.</p>
+<p>Flow:</p>
+<ol><li>Launch <strong>Puppeteer</strong>.</li>
+<li>Login to <code>https://parents.msrit.edu/newparents/</code>.</li>
+<li>Collect authenticated cookies.</li>
+<li>Close the browser.</li>
+<li>Use <strong>Axios</strong> and <strong>Cheerio</strong> for lighter HTML fetch/parse.</li>
+<li>Fetch unique attendance, CIE, and exam-history URLs.</li>
+<li>Normalize:</li></ol>
+<ul><li>subject code/name</li>
+<li>attendance present/absent/remaining/percentage</li>
+<li>T1/T2/AQ marks</li>
+<li>total marks</li>
+<li>current year from semester</li>
+<li>exam history and CGPA</li></ul>
+<ol><li>Upsert the student into <strong>Postgres</strong> through <code>studentService.syncStudents</code>.</li></ol>
+<p>Good engineering point:</p>
+<p>&quot;The scraper does not keep a full browser open for every page. It uses Puppeteer only for authenticated login, then switches to HTTP requests with cookies, which is lighter and more scalable.&quot;</p>
+<p>Production concern:</p>
+<p>Puppeteer is CPU/memory heavy. At high traffic, scraping should move to a background queue with concurrency limits, retries, timeouts, and persistent job status.</p>
+<h3 id="report-flow">Report Flow</h3>
+<p>Student dashboard report:</p>
+<ol><li><code>GET /api/report/student/:usn</code></li>
+<li>Check <strong>Postgres</strong> <strong>JSONB</strong> data first.</li>
+<li>If data exists with subjects, return DB data.</li>
+<li>If missing, trigger scraper.</li>
+<li>Fetch fresh data and return it.</li></ol>
+<p>AI remark:</p>
+<ol><li><code>GET /api/report/:usn</code></li>
+<li>Load student dashboard data.</li>
+<li>Extract <code>details.subjects</code>, handling nested compatibility cases.</li>
+<li>Send payload to <strong>FastAPI</strong> <code>/generate-remark</code>.</li>
+<li>Return AI output and metadata.</li></ol>
+<p>Manual update:</p>
+<ol><li><code>POST /api/report/update</code></li>
+<li>Enforces 5-minute cooldown based on <code>details.last_updated</code>.</li>
+<li>Triggers scraper if allowed.</li>
+<li>Returns updated student data.</li></ol>
+<h3 id="email-and-whatsapp-flow">Email And WhatsApp Flow</h3>
+<p>Email:</p>
+<ol><li>Frontend sends <code>usn</code> and <code>htmlContent</code> to <code>/api/report/send-email</code>.</li>
+<li>Backend fetches student and parents from <strong>Postgres</strong>.</li>
+<li><strong>Puppeteer</strong> renders client-provided HTML into PDF.</li>
+<li>PDF is uploaded to <strong>Cloudinary</strong>.</li>
+<li><strong>Resend</strong> sends the PDF to each parent.</li></ol>
+<p>WhatsApp:</p>
+<ol><li>Frontend sends <code>usn</code> and <code>htmlContent</code> to <code>/api/report/send-whatsapp</code>.</li>
+<li>Backend generates PDF.</li>
+<li>Uploads to <strong>Cloudinary</strong>.</li>
+<li>If <strong>Twilio</strong> is configured, sends <strong>WhatsApp</strong> messages.</li>
+<li>If not configured, prepares the message payloads.</li></ol>
+<p>Production concern:</p>
+<p>Rendering arbitrary HTML from the client in Puppeteer should be sanitized or generated server-side from trusted templates. Otherwise it is risky in a production backend.</p>
+<h3 id="fastapi-ai-remark-flow">FastAPI AI Remark Flow</h3>
+<p>Files:</p>
+<ul><li><code>main.py</code></li>
+<li><code>routers/report_router.py</code></li>
+<li><code>services/ai_service.py</code></li>
+<li><code>services/prompt_builder.py</code></li>
+<li><code>services/llm_provider.py</code></li></ul>
+<p>Flow:</p>
+<ol><li><strong>Express</strong> calls <strong>FastAPI</strong> <code>/generate-remark</code>.</li>
+<li><code>report_router.py</code> accepts the student data as a dict.</li>
+<li><code>AIService</code> validates <code>subjects</code>.</li>
+<li><code>PromptBuilder</code> builds a strict two-line academic remark <strong>prompt</strong>.</li>
+<li><code>GroqLLMProvider</code> calls <strong>Groq</strong> using configured model.</li>
+<li>Response includes student details, AI remark, model, token usage, and generation time.</li></ol>
+<p>Interview-safe answer:</p>
+<p>&quot;I kept AI remark generation in FastAPI because the Python ecosystem is stronger for AI tooling. Express owns product workflows, while FastAPI owns model calls and RAG logic. That split keeps Node focused on API/business logic and Python focused on LLM orchestration.&quot;</p>
+<h3 id="fastapi-rag-flow">FastAPI RAG Flow</h3>
+<p>Files:</p>
+<ul><li><code>routers/rag_router.py</code></li>
+<li><code>services/rag_service.py</code></li></ul>
+<p>Sync flow:</p>
+<ol><li><strong>Express</strong> proctor login calls <code>notifyRagSync</code>.</li>
+<li><strong>FastAPI</strong> <code>/api/rag/sync</code> starts a background task.</li>
+<li><code>RAGService.sync_data</code> fetches mapped students from <strong>Postgres</strong> using raw <strong>SQL</strong>.</li>
+<li>Each student becomes chunks:</li></ol>
+<ul><li>identity</li>
+<li>academics</li>
+<li>attendance</li>
+<li>history</li>
+<li>conduct</li>
+<li>misc</li></ul>
+<ol><li><strong>Gemini</strong> <strong>embeddings</strong> create vectors.</li>
+<li>Documents are stored in <strong>PGVector</strong> collection <code>student_data_v2</code>.</li></ol>
+<p>Chat flow:</p>
+<ol><li>Frontend calls <strong>FastAPI</strong> <code>/api/rag/chat</code> directly.</li>
+<li>Request includes <code>question</code> and <code>proctor_id</code>.</li>
+<li>Query is rewritten by <strong>Gemini</strong>.</li>
+<li>Intent detection selects chunk types.</li>
+<li>Retrieval combines:</li></ol>
+<ul><li><strong>BM25</strong> from current proctor documents</li>
+<li><strong>PGVector</strong> <strong>semantic retrieval</strong></li></ul>
+<ol><li>Retrieved chunks are formatted into context.</li>
+<li><strong>Gemini</strong> generates a grounded answer.</li></ol>
+<p>Production concerns:</p>
+<ul><li><strong>FastAPI</strong> <strong>RAG</strong> endpoint trusts <code>proctor_id</code> from the request body.</li>
+<li>No <strong>auth</strong>/<strong>session</strong> validation on <strong>FastAPI</strong> routes.</li>
+<li>Sync drops <strong>PGVector</strong> tables before adding new documents.</li>
+<li><code>is_syncing</code> is in-memory, so multiple <strong>FastAPI</strong> workers would not share the lock.</li>
+<li>Direct raw <strong>SQL</strong> should be wrapped with tighter connection management and monitoring.</li></ul>
+<h3 id="deployment-and-configuration">Deployment And Configuration</h3>
+<p>Current local startup:</p>
+<ul><li><code>start-all.bat</code> and <code>run.bat</code> start <strong>FastAPI</strong>, <strong>Express</strong>, and frontend.</li>
+<li><strong>FastAPI</strong> runs with <code>python main.py</code>.</li>
+<li><strong>Express</strong> runs with <code>node server.js</code>.</li>
+<li>Frontend runs with <code>npm run dev</code>.</li></ul>
+<p>Important gap:</p>
+<p>No Dockerfile or docker-compose file exists in the repository.</p>
+<p>Say this in interviews:</p>
+<p>&quot;Right now it is locally runnable through batch scripts and environment variables. For production, I would containerize Express and FastAPI separately, run migrations in CI/CD, use managed Postgres/Redis, and put both services behind a reverse proxy or API gateway with proper health checks.&quot;</p>
+<h3 id="config-shape">Config Shape</h3>
+<p>Express env keys seen:</p>
+<ul><li><code>PORT</code></li>
+<li><code>FASTAPI_URL</code></li>
+<li><code>REDIS_URL</code></li>
+<li><code>DATABASE_URL</code></li>
+<li><code>RESEND_API_KEY</code></li>
+<li><code>RESEND_FROM_EMAIL</code></li>
+<li><code>CLOUDINARY_CLOUD_NAME</code></li>
+<li><code>CLOUDINARY_API_KEY</code></li>
+<li><code>CLOUDINARY_API_SECRET</code></li>
+<li><code>CDP_PORT</code></li>
+<li><code>CDP_HOST</code></li>
+<li><code>PIGGYBACK_WHITELIST</code></li></ul>
+<p>FastAPI env keys seen:</p>
+<ul><li><code>GROQ_API_KEY</code></li>
+<li><code>GROQ_MODEL</code></li>
+<li><code>GEMINI_API_KEY</code></li>
+<li><code>DATABASE_URL</code></li>
+<li><code>PORT</code></li>
+<li><code>REDIS_HOST</code></li>
+<li><code>REDIS_PORT</code></li>
+<li><code>EXPRESS_API_URL</code></li>
+<li><code>OLLAMA_API_URL</code></li>
+<li><code>OLLAMA_MODEL</code></li></ul>
+<p>Frontend env keys:</p>
+<ul><li><code>NEXT_PUBLIC_API_URL</code></li>
+<li><code>NEXT_PUBLIC_FASTAPI_URL</code></li></ul>
+<p>Do not expose secret values in interviews.</p>
+<h3 id="strong-backend-areas">Strong Backend Areas</h3>
+<ul><li><strong>Express</strong> route/controller/service/repository layering.</li>
+<li><strong>Prisma</strong> schema with relational mapping for students, proctors, parents, assignments.</li>
+<li><strong>Redis</strong> <strong>session</strong> management with <strong>sliding TTL</strong>.</li>
+<li><strong>Puppeteer</strong>-to-<strong>Axios</strong> scraping optimization.</li>
+<li><strong>JSONB</strong> strategy for changing academic data.</li>
+<li><strong>FastAPI</strong> service split for AI workloads.</li>
+<li><strong>RAG</strong> chunking, <strong>metadata filtering</strong>, <strong>BM25</strong> plus vector retrieval.</li>
+<li>PDF generation and parent communication flow.</li></ul>
+<h3 id="weak-backend-areas-to-own-honestly">Weak Backend Areas To Own Honestly</h3>
+<ul><li>Admin routes are not backend-protected.</li>
+<li><strong>FastAPI</strong> <strong>RAG</strong> routes are unauthenticated.</li>
+<li>No role/ownership <strong>authorization</strong> checks.</li>
+<li><strong>CORS</strong> is wide open.</li>
+<li>No <strong>API</strong> <strong>rate limiter</strong> except scraper cooldown.</li>
+<li>No automated test suite.</li>
+<li>No <strong>Docker</strong> production setup.</li>
+<li>Logging is mostly <code>console.log</code> / <code>print</code>.</li>
+<li>Some legacy files are inconsistent with current <strong>Prisma</strong> schema.</li>
+<li>Bulk operations lack <strong>transactions</strong>.</li>
+<li>Scraping is synchronous and heavy.</li></ul>
+<h2 id="2-complete-interview-conversations">2. Complete Interview Conversations</h2>
+<p>Every follow-up question below includes a follow-up answer. Practice these out loud. The goal is not to memorize every word, but to develop a confident backend story around the actual repository.</p>
+<h3 id="conversation-1-project-overview">Conversation 1: Project Overview</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Explain MSR Insight from a backend point of view.</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">MSR Insight is an academic reporting and proctoring system. The backend is split into two services. <strong>Express</strong> is the main business <strong>API</strong>: it handles <strong>authentication</strong>, <strong>Redis</strong> <strong>sessions</strong>, <strong>Prisma</strong>/<strong>Postgres</strong> access, student and proctor APIs, scraping, report generation, email, and <strong>WhatsApp</strong> workflows. <strong>FastAPI</strong> is the AI service: it generates academic remarks through <strong>Groq</strong> and powers a <strong>RAG</strong> chatbot using <strong>Gemini</strong>, <strong>LangChain</strong>, and <strong>PGVector</strong>. The main backend idea is that <strong>Express</strong> owns the product workflows, while <strong>FastAPI</strong> owns the AI-heavy workflows.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">What part of the backend did you mainly build or own?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">My main backend contribution was the <strong>API</strong> and data flow. I worked around <strong>auth</strong>, <strong>session</strong> handling, student/proctor routes, <strong>Prisma</strong>/<strong>Postgres</strong> models, scraping and normalization, and the integration with <strong>FastAPI</strong> for AI remarks and <strong>RAG</strong>. I can explain the request lifecycle end to end, from login to dashboard data to report generation.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Why is this project backend-heavy?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Because most of the complexity is behind the UI. The backend has to authenticate users, manage <strong>sessions</strong>, scrape an external portal, normalize messy academic data, store it safely, generate reports, communicate with parents, and call AI services. The frontend displays the result, but the backend coordinates the real workflows.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What is the most impressive backend feature?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">The strongest feature is probably the data pipeline: using <strong>Puppeteer</strong> for authenticated portal login, switching to <strong>Axios</strong> and <strong>Cheerio</strong> for lighter page fetching, normalizing that academic data, storing it in <strong>Postgres</strong> <strong>JSONB</strong>, and then using it for dashboards, reports, alerts, and AI. It is not just <strong>CRUD</strong>; it is an actual backend workflow.</p>
+<h3 id="conversation-2-backend-architecture">Conversation 2: Backend Architecture</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Describe the backend architecture.</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The architecture is a two-service backend. <strong>Express</strong> is the gateway and product backend. It exposes routes for <strong>auth</strong>, reports, proctors, notifications, student sync, and admin workflows. <strong>FastAPI</strong> is a separate intelligence service for AI remarks and <strong>RAG</strong> chat. <strong>Express</strong> uses <strong>Prisma</strong> to talk to <strong>Postgres</strong>, <strong>Redis</strong> for <strong>sessions</strong>, and <strong>Axios</strong> to call <strong>FastAPI</strong>. <strong>FastAPI</strong> also reads from <strong>Postgres</strong> for <strong>RAG</strong> sync and stores vectors in <strong>PGVector</strong>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Is this a microservice architecture?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">I would not oversell it as pure microservices. It is closer to a distributed monolith or a two-service architecture. <strong>Express</strong> and <strong>FastAPI</strong> are separate runtimes, but they still share the database and are tightly coupled around student data. That is fine for this project stage, but for true microservices I would separate ownership and communication contracts more strictly.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Why not keep everything in Express?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">I could keep everything in <strong>Express</strong>, but Python has much stronger AI and <strong>LangChain</strong> tooling. <strong>FastAPI</strong> made it easier to build the <strong>RAG</strong> pipeline, use <strong>embeddings</strong>, and integrate <strong>LLM</strong> providers cleanly. <strong>Express</strong> remains better suited for the main product <strong>API</strong> and Node-based workflows.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What is the downside of two services?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">The downside is operational complexity. Now I have two servers, two sets of environment variables, <strong>service-to-service</strong> failures, and deployment coordination. That is why production needs <strong>health checks</strong>, timeouts, private networking, and ideally service <strong>authentication</strong> between <strong>Express</strong> and <strong>FastAPI</strong>.</p>
+<h3 id="conversation-3-express-app-lifecycle">Conversation 3: Express App Lifecycle</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">What happens when the Express backend starts?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text"><code>server.js</code> imports the <strong>Express</strong> app from <code>src/app.js</code> and starts listening on the configured port. In <code>app.js</code>, the backend applies <strong>CORS</strong>, JSON parsing, a health endpoint, mounts <strong>auth</strong>, report, proctor, notification, student sync, and admin routes, then registers the global error handler at the end.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why is the error handler at the end?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">In <strong>Express</strong>, error middleware should come after route registration so that <code>next(error)</code> from controllers can reach it. If I register it before routes, it will not catch errors from those later route handlers.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What middleware runs before your routes?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">The global middleware is <code>cors()</code> and <code>express.json()</code>. <strong>CORS</strong> allows browser requests, and <code>express.json()</code> parses JSON request bodies so controllers can read <code>req.body</code>. Route-specific <strong>session</strong> middleware is applied later on protected route groups or individual routes.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What would you improve in app startup?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would validate required environment variables at startup and fail fast if database, <strong>Redis</strong>, or <strong>FastAPI</strong> config is missing. I would also add a production health endpoint that checks <strong>Postgres</strong> and <strong>Redis</strong>, not just whether <strong>Express</strong> is running.</p>
+<h3 id="conversation-4-route-organization">Conversation 4: Route Organization</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Explain your route organization.</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">Routes are grouped by domain. <code>auth.routes.js</code> handles login, register, logout, and profile. <code>report.routes.js</code> handles dashboard data, AI remarks, update, email, and <strong>WhatsApp</strong>. <code>proctor.routes.js</code> handles proctor dashboard, proctee details, scrape list, notifications, and chat. <code>admin.routes.js</code> handles proctor management, student assignment, parents, and stats. That separation makes the backend easier to reason about.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Which routes are protected?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Report routes are protected with <code>requireSession</code>, and proctor plus notification routes use router-level <strong>session</strong> verification. <strong>Auth</strong> login/register routes are public. Admin routes are currently public on the backend, which is a clear production security gap.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Why is route-level organization useful?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">It keeps each <strong>API</strong> surface focused. When I debug report generation, I know to look at report routes, controller, and service. When I debug proctor dashboard issues, I look at proctor routes and repository queries. It avoids one giant controller file.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What route cleanup is needed?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">There are two student sync route files, but only <code>students.js</code> is mounted. I would remove or merge the duplicate. I would also protect admin routes and make route naming more consistent before production.</p>
+<h3 id="conversation-5-student-login-flow">Conversation 5: Student Login Flow</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Walk me through student login.</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The student sends USN and DOB to <code>POST /api/auth/login</code>. The controller checks required fields. The service normalizes the DOB, looks up the student through <strong>Prisma</strong>, and if the student is missing it tries to scrape and sync the record. Once validated, it creates a random <strong>UUID</strong> <strong>session</strong>, stores it in <strong>Redis</strong>, and returns the <strong>session</strong> ID and USN to the frontend.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why normalize DOB?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Because the frontend, database, and portal can represent dates differently. The backend standardizes DOB into <code>DD-MM-YYYY</code>, so credential checks do not fail just because one input came as <code>YYYY-MM-DD</code>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What happens if the student does not exist?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">The backend tries to scrape the student from the college portal using the provided USN and DOB. If scraping succeeds, it syncs the student into <strong>Postgres</strong> and retries the lookup. If scraping fails, login returns invalid credentials.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">Is using USN and DOB strong authentication?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">It is acceptable for a college portal-style student lookup, but it is not strong <strong>authentication</strong> for a sensitive production system. I would add stronger <strong>auth</strong> options, rate-limited login, and maybe OTP or institutional SSO if this were going live.</p>
+<h3 id="conversation-6-proctor-login-flow">Conversation 6: Proctor Login Flow</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Walk me through proctor login.</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The proctor sends proctor ID and password to <code>POST /api/auth/proctor-login</code>. The backend uppercases the ID, fetches the proctor from <strong>Postgres</strong>, compares the password using <strong>bcrypt</strong>, and creates or reuses a <strong>Redis</strong> <strong>session</strong>. After successful login, it notifies <strong>FastAPI</strong> to start <strong>RAG</strong> sync so the chatbot has fresh student data.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why use bcrypt?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Passwords should never be stored in plaintext. <strong>Bcrypt</strong> is intentionally slow and salted, so even if password hashes are leaked, brute forcing is harder. It is a standard practical choice for password hashing in a Node backend.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Why reuse an existing proctor session?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">It avoids creating unlimited active <strong>sessions</strong> for the same proctor. In this project, one active <strong>session</strong> per proctor is simpler to reason about. The tradeoff is that if we want multi-device <strong>session</strong> management later, we need a more explicit <strong>session</strong> table or per-device <strong>sessions</strong>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">Why trigger RAG sync on login?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">The idea is freshness. When a proctor logs in, the backend nudges <strong>FastAPI</strong> to rebuild vectors from the latest student records. For production, I would not tie it only to login; I would sync after data updates or through scheduled/background jobs.</p>
+<h3 id="conversation-7-session-management">Conversation 7: Session Management</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Do you use JWT or sessions?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">This project uses <strong>Redis</strong>-backed opaque <strong>sessions</strong>, not <strong>JWT</strong>. The backend generates a <strong>UUID</strong> <strong>session</strong> ID and stores the identity in <strong>Redis</strong> as <code>session:&lt;id&gt;</code>. The frontend sends the <strong>session</strong> ID in the <code>x-session-id</code> header on protected requests. The middleware validates it and refreshes the <strong>TTL</strong>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why not JWT?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">JWTs are good for stateless verification, but invalidation is harder. With <strong>Redis</strong> <strong>sessions</strong>, logout and forced invalidation are straightforward because the server controls the <strong>session</strong> store. The tradeoff is <strong>Redis</strong> becomes part of the <strong>auth</strong> path.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">How does logout work?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Logout reads the <strong>session</strong> ID, looks up the identity in <strong>Redis</strong>, deletes the reverse mapping like <code>usn:&lt;USN&gt;</code> or <code>proctor:&lt;ID&gt;</code>, and deletes <code>session:&lt;id&gt;</code>. After that, the same <strong>session</strong> ID will fail middleware validation.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What happens if Redis is down?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">Protected routes cannot validate <strong>sessions</strong>, so they should fail closed. In production I would monitor <strong>Redis</strong>, use a managed highly available <strong>Redis</strong> setup, and expose <strong>health checks</strong> so traffic is not routed to an unhealthy instance.</p>
+<h3 id="conversation-8-session-middleware">Conversation 8: Session Middleware</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">What does your session middleware do?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text"><code>requireSession</code> reads the <code>x-session-id</code> header, checks <strong>Redis</strong> for <code>session:&lt;id&gt;</code>, rejects missing or expired <strong>sessions</strong>, splits the identity into role and ID, attaches that to <code>req.user</code>, and refreshes the <strong>Redis</strong> <strong>TTL</strong> to implement a sliding <strong>session</strong> window.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Does it check roles?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Currently it only validates that the <strong>session</strong> exists and attaches the role. It does not enforce route-level roles by itself. That is a gap I would fix by adding middleware like <code>requireRole('proctor')</code> and <strong>ownership checks</strong>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What is a sliding TTL?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">It means the <strong>session</strong> expiry is extended whenever the user makes an authenticated request. So active users stay logged in, while inactive <strong>sessions</strong> eventually expire.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What is the security risk here?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">A valid <strong>session</strong> is not enough. The backend also needs to verify that the user is allowed to access the route target. For example, a proctor <strong>session</strong> should only access that proctor's students, and a student should only access their own report.</p>
+<h3 id="conversation-9-authorization-gaps">Conversation 9: Authorization Gaps</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">What is the biggest security weakness in your backend?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The biggest weakness is <strong>authorization</strong>. The project has <strong>session</strong> validation, but several routes do not fully enforce role and ownership. Admin routes are public on the backend, <strong>FastAPI</strong> <strong>RAG</strong> routes are directly callable, and some routes trust URL params or request body values too much.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">How would you fix proctor authorization?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">I would add middleware that requires a proctor role and checks that <code>req.user.id</code> matches <code>req.params.proctorId</code>. For student data under a proctor, I would also verify the student is assigned to that proctor for the requested academic year.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">How would you secure admin routes?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">I would remove the client-side <code>admin123</code> flow and implement real backend admin <strong>authentication</strong>. Admins should be stored in the database or handled through SSO, and admin APIs should require an admin <strong>session</strong>, audit logging, and stricter validation.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you secure FastAPI?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would stop exposing <strong>FastAPI</strong> directly to the browser. <strong>Express</strong> should validate the user <strong>session</strong> and then call <strong>FastAPI</strong> internally with a trusted proctor ID. At minimum, <strong>FastAPI</strong> should require a service token or signed internal request.</p>
+<h3 id="conversation-10-database-schema">Conversation 10: Database Schema</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Explain your database schema.</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The core schema has <code>Student</code>, <code>Proctor</code>, <code>Parent</code>, and <code>ProctorStudentMap</code>. Students are keyed by USN and store academic data in a <strong>JSONB</strong> <code>details</code> field. Proctors have a hashed password. Parents belong to students using a composite key of USN and relation. <code>ProctorStudentMap</code> connects students to proctors for a specific academic year.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why use a map table?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Because proctor assignment is a relationship, not a fixed field on the student. The map table lets us include academic year and change assignments over time without rewriting the student record itself.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Why is there a unique constraint on student and academic year?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">It enforces one assigned proctor per student for a given academic year. That matches the business rule and prevents duplicate or conflicting proctor assignments.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What schema issue would you improve?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would add indexes for the actual dashboard access pattern, especially <code>(proctor_id, academic_year)</code> on the mapping table. I would also extract frequently queried metrics from <strong>JSONB</strong> into summary columns or tables.</p>
+<h3 id="conversation-11-jsonb-design">Conversation 11: JSONB Design</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Why store academic details as JSONB?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The academic data comes from scraping, so the structure can vary. Subjects, attendance details, assessments, and exam history are semi-structured. <strong>JSONB</strong> lets the backend store a normalized academic payload without constantly changing relational tables when the portal changes.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">What is the downside of JSONB?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">It is harder to query and <strong>index</strong> compared with normalized tables. For example, finding all students below 75 percent attendance requires parsing <strong>JSONB</strong> in application code right now. That is fine for small data, but not ideal for analytics at scale.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">When would you normalize it?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">I would normalize fields that become query-heavy: subject code, attendance percentage, marks, SGPA, CGPA, and last sync time. The full <strong>JSONB</strong> blob can still remain as the raw academic snapshot.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you index JSONB?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">If I had to query inside <strong>JSONB</strong>, I would consider GIN indexes or generated columns for specific JSON paths. But for predictable dashboard and alert queries, extracted relational summary tables are usually cleaner.</p>
+<h3 id="conversation-12-prisma-and-repositories">Conversation 12: Prisma And Repositories</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Why use Prisma in the Express backend?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text"><strong>Prisma</strong> gives a clean <strong>ORM</strong> layer for <strong>Postgres</strong> and makes relation queries, upserts, and schema visibility easier. The <strong>Prisma</strong> schema clearly documents students, proctors, parents, and mappings. It also keeps most database operations readable for a project with many domain flows.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Where do you still use raw SQL?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text"><strong>FastAPI</strong> <strong>RAG</strong> uses raw <strong>SQL</strong> through psycopg2 to fetch student and proctor mapping data for vector sync. That is acceptable there because <strong>FastAPI</strong> is outside <strong>Prisma</strong>, but I would still wrap it with better connection management and monitoring in production.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Are repositories used consistently?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Not fully. <strong>Auth</strong> and proctor flows use repositories, but the admin controller talks directly to <strong>Prisma</strong> in many places. It works, but I would move that logic into services/repositories to keep controller responsibilities cleaner.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How do migrations fit in?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">The schema lives in <code>prisma/schema.prisma</code>, and migrations define the actual database changes. In production, migrations should run in <strong>CI/CD</strong> before the app version that depends on them is deployed.</p>
+<h3 id="conversation-13-query-optimization">Conversation 13: Query Optimization</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How would you optimize the proctor dashboard query?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The dashboard fetches mappings by <code>proctor_id</code> and <code>academic_year</code>, then includes student data. I would add a composite <strong>index</strong> on <code>(proctor_id, academic_year)</code> because that matches the filter. I would also avoid recalculating dashboard summaries from <strong>JSONB</strong> on every request once data grows.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why is the existing unique index not enough?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">The existing unique <strong>index</strong> is on <code>(student_id, academic_year)</code>, which helps enforce assignment uniqueness. But the dashboard query filters by proctor and year, so the database needs an <strong>index</strong> that matches that access pattern.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What would you precompute?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">I would precompute lowest attendance, semester, section, and maybe risk status after each scrape. Then the dashboard can read a small summary instead of parsing every student's <strong>JSONB</strong> blob on every request.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you prove the index helps?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would run <code>EXPLAIN ANALYZE</code> before and after adding the <strong>index</strong> on realistic data. Then I would compare query plan, scan type, rows scanned, and response latency under load.</p>
+<h3 id="conversation-14-scraping-flow">Conversation 14: Scraping Flow</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Explain the scraping workflow.</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The scraper uses <strong>Puppeteer</strong> to log into the college parent portal with USN and DOB. After login, it extracts cookies, closes the browser, and uses <strong>Axios</strong> with those cookies to fetch attendance, CIE, and exam history pages. <strong>Cheerio</strong> parses the HTML, then the normalizer builds a consistent student record and upserts it into <strong>Postgres</strong>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why not use Puppeteer for everything?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text"><strong>Puppeteer</strong> is heavier because it runs a browser. It is useful for login and dynamic navigation, but once I have cookies, normal HTTP requests are cheaper and faster. That makes scraping more efficient.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What if the portal HTML changes?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">The scraper can break because selectors and table structures may change. I tried to make some parsing defensive, but in production I would add HTML fixtures, parser tests, better error reporting, and alerts when scraping success drops.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you scale scraping?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would move scraping into a worker queue with concurrency limits. <strong>API</strong> calls should enqueue a scrape job and return job status instead of blocking while <strong>Puppeteer</strong> runs. That protects the <strong>API</strong> and avoids overwhelming the portal.</p>
+<h3 id="conversation-15-data-normalization">Conversation 15: Data Normalization</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">What does your data normalizer do?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">It converts scraped portal data into a stable backend format. It standardizes assessment names like T1, T2, AQ1, and AQ2, calculates attendance percentage, derives current year from semester, builds subject records with marks and attendance, and keeps exam history and CGPA in a consistent shape.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why normalize at all?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Because the frontend, reports, alerts, and AI services need predictable data. If every feature parsed raw portal HTML or inconsistent objects, the system would become fragile very quickly.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">How do you handle missing data?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">The normalizer uses safe defaults like zero or <code>N/A</code> and skips invalid marks where needed. That keeps the dashboard from crashing. But I would still log missing-data patterns so we know when the scraper is failing silently.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">Where should validation happen?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">Validation should happen at multiple layers: input validation at <strong>API</strong> boundaries, normalization validation after scraping, and schema validation before writing to the database. Right now some of this is manual, and I would strengthen it with formal schemas.</p>
+<h3 id="conversation-16-report-update-and-cooldown">Conversation 16: Report Update And Cooldown</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How does manual report update work?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text"><code>POST /api/report/update</code> receives a USN, checks the <strong>session</strong>, loads the student, and reads <code>details.last_updated</code>. If the last update was within five minutes, it returns 429 with <code>nextAllowedAt</code>. Otherwise it triggers a fresh scrape, syncs the data, and returns the updated student dashboard data.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Is that full rate limiting?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">No, it is a feature-specific cooldown. It protects the scraping endpoint from rapid repeated updates for the same student, but it does not rate-limit login, admin APIs, <strong>RAG</strong> chat, or general traffic.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Why use 429?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">429 means too many requests, and it fits the cooldown behavior. The response also includes <code>nextAllowedAt</code>, so the frontend can show a countdown instead of just failing vaguely.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What race condition can happen?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">Two update requests for the same student could both pass the cooldown check before either writes <code>last_updated</code>. I would fix that with a per-student lock or queue-level de-duplication.</p>
+<h3 id="conversation-17-ai-remark-generation">Conversation 17: AI Remark Generation</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How does AI remark generation work?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text"><strong>Express</strong> loads the student's academic data from <strong>Postgres</strong>, extracts the subjects array, and calls <strong>FastAPI</strong> <code>/generate-remark</code>. <strong>FastAPI</strong> validates the payload, builds a strict <strong>prompt</strong>, calls <strong>Groq</strong>, and returns a concise academic remark with metadata like model, token usage, and generation time.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why call FastAPI from Express?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text"><strong>Express</strong> already owns the authenticated product flow and knows which student report is being generated. <strong>FastAPI</strong> owns the AI implementation. So <strong>Express</strong> prepares trusted student data and delegates AI generation to the Python service.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What if FastAPI is down?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">The <strong>Express</strong> report controller catches connection errors and returns a service-unavailable style response for AI analysis. In production I would add retries for transient failures and a <strong>circuit breaker</strong> so requests fail fast when the AI service is unhealthy.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you test AI remarks?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would mock the <strong>Groq</strong> provider and test <strong>prompt</strong> construction, input validation, and response shape. I would not depend on real <strong>LLM</strong> output in unit tests because it is nondeterministic and slower.</p>
+<h3 id="conversation-18-fastapi-rag-sync">Conversation 18: FastAPI RAG Sync</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Explain the RAG sync flow.</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">When a proctor logs in, <strong>Express</strong> calls <strong>FastAPI</strong> <code>/api/rag/sync</code>. <strong>FastAPI</strong> starts a background sync task. The <strong>RAG</strong> service reads student records and proctor mappings from <strong>Postgres</strong>, chunks each student into identity, academics, attendance, history, conduct, and misc documents, generates <strong>embeddings</strong> with <strong>Gemini</strong>, and stores them in <strong>PGVector</strong>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why chunk by topic?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Topic-based chunks make retrieval more precise. If the question is about attendance, the retriever can focus on attendance chunks instead of pulling a huge mixed student record with unrelated marks and profile data.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What is risky about the sync implementation?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">It drops the existing <strong>PGVector</strong> tables before adding new documents. That is simple for a clean rebuild, but risky in production because queries during sync can return no context or fail if the sync crashes halfway.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you improve sync?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would use versioned collections or document-level upserts. Build the new vector set separately, then switch traffic to it after success. I would also store sync state in <strong>Redis</strong> or <strong>Postgres</strong> instead of only in memory.</p>
+<h3 id="conversation-19-rag-chat-query-flow">Conversation 19: RAG Chat Query Flow</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How does RAG chat answer a proctor question?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text"><strong>FastAPI</strong> receives the question and proctor ID. It rewrites the query, detects intent based on keywords, retrieves context using a mix of <strong>BM25</strong> and <strong>PGVector</strong> semantic search, filters documents by proctor ID, formats the retrieved chunks, and asks <strong>Gemini</strong> to answer only from that context.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why combine BM25 and vector retrieval?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text"><strong>BM25</strong> is good for exact keyword matches like USN, subject codes, or names. Vector retrieval is better for semantic questions. Combining both gives better coverage than relying on only one retrieval style.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Is the current RAG endpoint secure?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Not enough. It filters by <code>proctor_id</code>, but that value comes from the request body. If <strong>FastAPI</strong> is exposed, someone could spoof another proctor ID. The safer design is to route <strong>RAG</strong> chat through <strong>Express</strong> after <strong>session</strong> validation.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What would you optimize in query time?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">The <strong>BM25</strong> retriever is built from proctor documents during the query flow, which can become expensive. I would prebuild or cache retrievers, or store searchable summaries, especially for proctors with many students.</p>
+<h3 id="conversation-20-express-to-fastapi-communication">Conversation 20: Express To FastAPI Communication</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How do Express and FastAPI communicate?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text"><strong>Express</strong> uses an <strong>Axios</strong> client configured with <code>FASTAPI_URL</code>, JSON headers, and a 15-second timeout. It calls <code>/generate-remark</code> for AI remarks and <code>/api/rag/sync</code> for background <strong>RAG</strong> sync notification.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why set a timeout?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Without a timeout, <strong>Express</strong> requests can hang too long if <strong>FastAPI</strong> or an <strong>LLM</strong> provider is slow. A timeout gives the <strong>API</strong> a bounded failure mode and lets the frontend receive a clear error.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Would you make this asynchronous?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">For AI remarks, synchronous can be acceptable if the response is quick. For <strong>RAG</strong> sync, scraping, PDF generation, and email delivery, I would prefer background jobs because they are heavier and less predictable.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you protect service-to-service calls?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would keep <strong>FastAPI</strong> private on the internal network and require a service token or signed request from <strong>Express</strong>. The frontend should not need to call <strong>FastAPI</strong> directly for sensitive data.</p>
+<h3 id="conversation-21-notifications">Conversation 21: Notifications</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How are proctor notifications generated?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The backend fetches all students assigned to a proctor for the academic year, parses each student's <strong>JSONB</strong> details, extracts subjects, finds subjects below 75 percent attendance, sorts them by lowest attendance, and returns alert data to the UI.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why compute notifications dynamically?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">For a small dataset it is simple and always reflects the latest student details. It avoids managing another alerts table early in the project.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Why is this a scalability issue?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Because every notification request may scan multiple students and parse <strong>JSONB</strong> in Node. With many proctors and students, that becomes CPU-heavy and slower than serving precomputed alert rows.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you improve it?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would compute alerts after each scrape or sync and store them in an indexed table. Then the notifications endpoint becomes a simple query by proctor ID and academic year.</p>
+<h3 id="conversation-22-pdf-and-email-reports">Conversation 22: PDF And Email Reports</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How does report email delivery work?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The frontend sends the report HTML and USN to <strong>Express</strong>. The backend fetches student and parent records, uses <strong>Puppeteer</strong> to render the HTML into an A4 PDF, uploads the PDF to <strong>Cloudinary</strong>, then sends it to each parent through <strong>Resend</strong> while tracking success or failure per parent.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why generate PDF server-side?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Server-side PDF generation gives more control and consistency. It also lets the backend attach the same official report to emails without depending on the client's browser environment.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What is risky about accepting HTML from the frontend?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Rendering client-provided HTML in <strong>Puppeteer</strong> can be risky if it includes unwanted scripts or external resources. For production, I would sanitize it or generate reports server-side from trusted templates and data.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">Should email sending be synchronous?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">For a small number of parents it works, but production should use a queue. PDF generation, upload, and email delivery are slow external operations, and the <strong>API</strong> should return job status instead of making the user wait.</p>
+<h3 id="conversation-23-whatsapp-delivery">Conversation 23: WhatsApp Delivery</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How does WhatsApp report delivery work?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The backend generates the report PDF, uploads it to <strong>Cloudinary</strong>, builds a message for each parent, and sends it using <strong>Twilio</strong> <strong>WhatsApp</strong> if <strong>Twilio</strong> credentials are configured. If <strong>Twilio</strong> is not configured, it still returns prepared message data and status.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">How do you handle phone numbers?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">The code cleans spaces and symbols and defaults to the Indian country code if no plus prefix is present. That is okay locally, but production should use a proper phone validation library and store normalized E.164 numbers.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What if one parent's message fails?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">The result is captured per parent. One failure should not block every other parent. I would also store delivery attempts and retry failed sends through a background worker.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What production concern exists with Cloudinary links?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">Reports contain sensitive academic data, so public or long-lived links need care. I would use access-controlled storage, expiring signed URLs, or stricter permissions depending on the compliance requirements.</p>
+<h3 id="conversation-24-admin-backend">Conversation 24: Admin Backend</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Explain the admin backend.</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The admin routes manage proctors, student assignments, parent details, unassigned students, and basic stats. They use <strong>Prisma</strong> operations like <code>findMany</code>, <code>upsert</code>, <code>delete</code>, and <code>count</code>. The assignment design uses <code>proctor_student_map</code> with academic year to keep proctor-student assignment history clean.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">What is the biggest admin issue?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">The backend admin routes are not protected. The frontend has a client-side admin password, but that does not secure the <strong>API</strong>. Production needs real backend admin <strong>authentication</strong> and <strong>authorization</strong>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What transaction issue exists?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Bulk assignment loops through students one by one, so partial updates can happen if one write fails. Proctor deletion also deletes mappings and then the proctor. I would wrap these multi-step operations in <strong>Prisma</strong> <strong>transactions</strong>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What bug risk exists in removing students?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">The remove-student flow calculates the proctor ID but deletes by student and academic year. It should also verify the mapping belongs to that proctor, otherwise the URL proctor ID is not really being enforced.</p>
+<h3 id="conversation-25-validation-and-error-handling">Conversation 25: Validation And Error Handling</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How do you handle validation and errors?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">Validation is currently mostly manual in controllers: required fields are checked and errors are returned with status codes. <strong>FastAPI</strong> has Pydantic models available, but some routes accept raw dictionaries. Error handling uses try/catch in controllers and a global <strong>Express</strong> error handler, but it is not fully standardized yet.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">What would you improve in validation?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">I would use Zod or <strong>express</strong>-validator in <strong>Express</strong> and Pydantic models consistently in <strong>FastAPI</strong>. That would make request bodies, params, and query validation explicit and easier to test.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What is wrong with inconsistent error shapes?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">The frontend has to handle too many response formats, and debugging becomes harder. A consistent error shape with code, message, request ID, and details is cleaner for both developers and clients.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">Should all errors go through the global handler?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">Most unexpected errors should. Expected domain errors can still return specific status codes, but I would standardize them through custom error classes so controllers do not repeat response logic everywhere.</p>
+<h3 id="conversation-26-security-hardening">Conversation 26: Security Hardening</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">What security improvements would you make first?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">First I would fix <strong>authorization</strong>: backend admin <strong>auth</strong>, role checks, <strong>ownership checks</strong>, and <strong>FastAPI</strong> protection. Then I would restrict <strong>CORS</strong>, move <strong>session</strong> storage to secure <strong>httpOnly</strong> cookies or harden token storage, add login rate limiting, sanitize report HTML, and audit sensitive admin actions.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why are session IDs in localStorage risky?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">If the app has an <strong>XSS</strong> bug, JavaScript can read localStorage and steal the <strong>session</strong> ID. <strong>HttpOnly</strong> cookies reduce that risk because scripts cannot read them directly.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">Is CORS a security boundary?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Not by itself. <strong>CORS</strong> mainly controls browser-based cross-origin access. It does not stop server-to-server requests. Real security still needs <strong>authentication</strong> and <strong>authorization</strong> on the backend.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you protect login?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would rate-limit by IP and identity, avoid user enumeration in error messages, monitor failed attempts, enforce stronger proctor/admin passwords, and consider OTP or institutional SSO for stronger identity assurance.</p>
+<h3 id="conversation-27-scalability">Conversation 27: Scalability</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">What would fail first under heavy traffic?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">The scraper would fail first because <strong>Puppeteer</strong> is CPU and memory heavy and depends on an external college portal. After that, <strong>JSONB</strong> parsing in dashboard and notification APIs could become slow, and <strong>RAG</strong> sync could become expensive because it rebuilds vector data.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">How would you scale Express?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">I would run multiple <strong>Express</strong> instances behind a load balancer. Since <strong>sessions</strong> are in <strong>Redis</strong> and data is in <strong>Postgres</strong>, requests do not need sticky <strong>sessions</strong>. I would also move CPU-heavy work to workers.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">How would you handle one million users?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">I would separate request/response APIs from background jobs, add caching, add DB indexes, use read replicas for read-heavy endpoints, scale <strong>Express</strong> and <strong>FastAPI</strong> independently, and make scraping queue-based with strict concurrency limits.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What should be cached first?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">Proctor dashboard summaries, notification alerts, and AI remarks keyed by student <code>last_updated</code>. Those are read-heavy and do not need to be recomputed on every request if the underlying student data has not changed.</p>
+<h3 id="conversation-28-caching-strategy">Conversation 28: Caching Strategy</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">What caching strategy would you use?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text"><strong>Redis</strong> is already in the stack, so I would use it for short-lived caches. Dashboard summaries can be cached by proctor ID and academic year. AI remarks can be cached by student USN plus <code>last_updated</code>. Notifications can be cached until a scrape updates student details or assignments change.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">How do you avoid cache leaks?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Cache keys must include ownership context, like proctor ID and academic year. Also, <strong>authorization</strong> should happen before returning cached data. I would never use a generic key like just <code>dashboard</code> for user-specific data.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">How do you invalidate caches?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">After a successful scrape, invalidate that student's report and any proctor dashboards or notifications affected by that student. After assignment changes, invalidate proctor dashboard and alert caches for the affected academic year.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What should not be cached?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">Sensitive responses should not be cached in shared layers unless the key and access control are very strict. I also would not cache failed <strong>auth</strong> responses or anything that depends on rapidly changing <strong>session</strong> state.</p>
+<h3 id="conversation-29-concurrency-and-race-conditions">Conversation 29: Concurrency And Race Conditions</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">What race conditions can happen in this backend?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">Two update requests for the same student can both pass the cooldown and trigger duplicate scrapes. <strong>RAG</strong> sync uses an in-memory lock, so multiple <strong>FastAPI</strong> workers could sync at the same time. Bulk assignment can partially succeed if one write fails mid-loop.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">How would you prevent duplicate scrapes?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">I would use a per-student job key in a queue. If a job for that USN is already pending or running, return the existing job status instead of starting another scrape.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">How would you make RAG sync safe?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Use a distributed lock in <strong>Redis</strong> or <strong>Postgres</strong> and make sync idempotent. I would also avoid dropping live vector tables and instead sync into a new version before switching.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you handle partial bulk assignment?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would decide the business behavior first. If it should be all-or-nothing, wrap it in a transaction. If partial success is acceptable, return a multi-status response with success and failure arrays.</p>
+<h3 id="conversation-30-deployment-and-docker">Conversation 30: Deployment And Docker</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How would you deploy this backend?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">Right now the project uses local batch scripts, not <strong>Docker</strong>. For production I would containerize <strong>Express</strong> and <strong>FastAPI</strong> separately, run them behind a <strong>reverse proxy</strong> or load balancer, keep <strong>FastAPI</strong> private, use <strong>managed Postgres</strong> and <strong>Redis</strong>, run <strong>Prisma</strong> migrations in <strong>CI/CD</strong>, and configure <strong>health checks</strong>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">Why containerize the services separately?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text"><strong>Express</strong> and <strong>FastAPI</strong> have different runtimes, dependencies, and scaling needs. Separate containers let me scale the product <strong>API</strong> and AI service independently and keep deployments cleaner.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What special issue does Puppeteer create in Docker?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text"><strong>Puppeteer</strong> needs Chromium and system dependencies. The container image must include those dependencies, and memory/concurrency limits need to be tuned because browser automation is heavier than normal <strong>API</strong> code.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What health checks would you add?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would keep simple liveness checks, but add readiness checks for <strong>Postgres</strong> and <strong>Redis</strong> on <strong>Express</strong>, and model/config/database readiness on <strong>FastAPI</strong>. That prevents routing traffic to a service that is running but not actually ready.</p>
+<h3 id="conversation-31-logging-and-monitoring">Conversation 31: Logging And Monitoring</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How would you monitor this in production?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">I would track <strong>API</strong> latency, error rates, <strong>Redis</strong> availability, <strong>Postgres</strong> query latency, scrape duration and failure rate, <strong>FastAPI</strong> latency, <strong>LLM</strong> errors, token usage, <strong>RAG</strong> sync status, email/<strong>WhatsApp</strong> delivery failures, and queue depth once background jobs are introduced.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">What logging change would you make first?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">I would replace scattered <code>console.log</code> and <code>print</code> statements with structured logs. Each request should have a request ID so I can trace a report request from <strong>Express</strong> to <strong>FastAPI</strong> and external providers.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What alert would matter most?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Scrape failure rate is critical because fresh student data depends on it. I would also alert on <strong>Redis</strong> failures because <strong>auth</strong> depends on <strong>Redis</strong>, and <strong>FastAPI</strong> failures because AI features depend on it.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you debug a slow report request?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would trace each stage: <strong>auth</strong>/<strong>session</strong> check, database read, scraper if triggered, <strong>FastAPI</strong> call if AI is requested, PDF generation if email is involved, and external provider latency. <strong>Request IDs</strong> and timing logs make that much easier.</p>
+<h3 id="conversation-32-testing-strategy">Conversation 32: Testing Strategy</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">How would you test this backend?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">I would start with unit tests for pure logic: DOB formatting, scraper normalization, <strong>prompt</strong> building, and <strong>session</strong> helpers. Then integration tests for <strong>Express</strong> routes using a test <strong>Postgres</strong> and <strong>Redis</strong>. For <strong>FastAPI</strong>, I would test validation and mock <strong>Groq</strong>/<strong>Gemini</strong> providers. For scraping, I would use saved HTML fixtures instead of hitting the real portal in tests.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">What would be your first test?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">I would test DOB normalization and student login behavior because <strong>auth</strong> is central and date formats are easy to break. Then I would add tests around <strong>session</strong> middleware and protected route access.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">How do you test Puppeteer scraping?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">I would separate parsing from browser automation. Parser logic can be tested with saved HTML fixtures. Browser login can have a smaller smoke/integration test, but I would not make every CI run depend on the live college portal.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How do you test AI code?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would mock the <strong>LLM</strong> providers. The tests should verify <strong>prompt</strong> construction, input validation, error handling, and response shape. Real model quality is better evaluated separately with sample datasets, not normal unit tests.</p>
+<h3 id="conversation-33-debugging-student-login">Conversation 33: Debugging Student Login</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">A student says login fails even with correct credentials. How would you debug?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">I would first inspect the request payload and DOB format. Then I would check whether the student exists in <strong>Postgres</strong> with that USN and normalized DOB. If not, I would check whether the fallback scraper ran and whether it failed due to portal login, network, or parsing issues.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">What is the most likely simple bug?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">DOB format mismatch. The frontend might send one format while the database has another. That is why <code>formatDOB</code> is important and why I would log normalized DOB during debugging without exposing sensitive data publicly.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What if scraping fails?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">Then login should return invalid credentials, but internally I would inspect scraper logs, portal response, timeout, and whether the page structure changed. I would also check if <strong>Puppeteer</strong> can launch in the current environment.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How would you make this easier to debug later?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would add structured <strong>auth</strong> logs with <strong>request IDs</strong> and failure reasons classified internally, like DOB mismatch, user missing, scraper timeout, or portal login failed. The client can still receive a generic safe message.</p>
+<h3 id="conversation-34-debugging-rag-chat">Conversation 34: Debugging RAG Chat</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">The RAG chatbot gives empty or wrong answers. How would you debug?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">I would check sync status first. Then I would confirm the proctor has mapped students, inspect whether chunks were generated, verify <strong>PGVector</strong> documents have the correct metadata, and look at the retrieved context before it goes to <strong>Gemini</strong>.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">What if sync status says never synced?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Then the chatbot may have no vector context. I would trigger <code>/api/rag/sync</code>, check <strong>FastAPI</strong> logs, database connectivity, embedding <strong>API</strong> errors, and whether <strong>PGVector</strong> insertion succeeded.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What if the wrong student's data appears?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">That points to <strong>metadata filtering</strong> or <strong>authorization</strong>. I would verify that every chunk has the correct <code>proctor_id</code>, and I would also fix the design so the proctor ID comes from a validated <strong>session</strong>, not from the request body.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">How do you evaluate RAG quality?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">I would create a small set of known proctor questions with expected answers, then measure whether retrieval returns the right chunks and whether the final answer stays grounded. <strong>RAG</strong> debugging starts with retrieval, not just the final <strong>LLM</strong> text.</p>
+<h3 id="conversation-35-final-production-readiness">Conversation 35: Final Production Readiness</h3>
+<div class="qa-label question-label">QUESTION:</div>
+<p class="question-text">Is this backend production-ready?</p>
+<div class="qa-label answer-label">ANSWER:</div>
+<p class="answer-text">Functionally, it has strong backend pieces, but I would not call it fully production-ready yet. The main missing parts are <strong>authorization</strong> hardening, protected admin routes, <strong>FastAPI</strong> isolation, background queues, <strong>Docker</strong>, <strong>structured logging</strong>, tests, stricter validation, and operational monitoring.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 1:</div>
+<p class="question-text">What would you fix first?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 1:</div>
+<p class="answer-text">Security first: admin backend <strong>auth</strong>, role checks, <strong>ownership checks</strong>, and removing direct <strong>FastAPI</strong> access from the browser. Scaling does not matter if the system can leak or modify the wrong data.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 2:</div>
+<p class="question-text">What would you tell an interviewer honestly?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 2:</div>
+<p class="answer-text">I would say the project is a strong backend prototype with real workflows, but I know exactly what needs hardening before production. That is a better answer than pretending every part is already enterprise-grade.</p>
+<div class="qa-label question-label">FOLLOW-UP QUESTION 3:</div>
+<p class="question-text">What is your strongest defense of the project?</p>
+<div class="qa-label answer-label">FOLLOW-UP ANSWER 3:</div>
+<p class="answer-text">It solves a real backend problem end to end: <strong>auth</strong>, <strong>sessions</strong>, database modeling, scraping, normalization, reports, parent communication, AI remarks, and <strong>RAG</strong> chat. The architecture is explainable, and the tradeoffs are clear.</p>
+<h2 id="3-things-to-revise-before-interview">3. Things To Revise Before Interview</h2>
+<h3 id="most-important-apis">Most Important APIs</h3>
+<ul><li><code>POST /api/auth/login</code></li>
+<li><code>POST /api/auth/proctor-login</code></li>
+<li><code>GET /api/auth/profile</code></li>
+<li><code>GET /api/report/student/:usn</code></li>
+<li><code>GET /api/report/:usn</code></li>
+<li><code>POST /api/report/update</code></li>
+<li><code>POST /api/report/send-email</code></li>
+<li><code>POST /api/report/send-whatsapp</code></li>
+<li><code>GET /api/proctor/:proctorId/dashboard</code></li>
+<li><code>GET /api/proctor/:proctorId/scrape-list</code></li>
+<li><code>GET /api/proctor/:proctorId/student/:studentUsn</code></li>
+<li><code>GET /api/notifications/:proctorId</code></li>
+<li><code>POST /api/students/sync</code></li>
+<li><code>/api/admin/*</code></li>
+<li><code>POST /generate-remark</code></li>
+<li><code>POST /api/rag/sync</code></li>
+<li><code>GET /api/rag/sync/status</code></li>
+<li><code>POST /api/rag/chat</code></li></ul>
+<h3 id="most-important-backend-flows">Most Important Backend Flows</h3>
+<ul><li>Student login -&gt; <strong>Redis</strong> <strong>session</strong> -&gt; dashboard.</li>
+<li>Missing student data -&gt; scraper -&gt; normalization -&gt; <strong>Postgres</strong> <strong>JSONB</strong>.</li>
+<li>Manual report update -&gt; cooldown -&gt; scraper.</li>
+<li>AI report -&gt; <strong>Express</strong> -&gt; <strong>FastAPI</strong> -&gt; <strong>Groq</strong>.</li>
+<li>Proctor login -&gt; <strong>Redis</strong> <strong>session</strong> -&gt; <strong>RAG</strong> sync notification.</li>
+<li>Proctor dashboard -&gt; assignments -&gt; <strong>JSONB</strong> parsing -&gt; lowest attendance.</li>
+<li>Notifications -&gt; assigned students -&gt; low attendance detection.</li>
+<li>Email report -&gt; <strong>Puppeteer</strong> PDF -&gt; <strong>Cloudinary</strong> -&gt; <strong>Resend</strong>.</li>
+<li><strong>WhatsApp</strong> report -&gt; PDF -&gt; <strong>Cloudinary</strong> -&gt; <strong>Twilio</strong>/prepared messages.</li>
+<li><strong>RAG</strong> chat -&gt; query rewrite -&gt; intent detection -&gt; <strong>BM25</strong> plus <strong>PGVector</strong> -&gt; <strong>Gemini</strong>.</li></ul>
+<h3 id="authentication-flow-to-remember">Authentication Flow To Remember</h3>
+<ul><li>This is not <strong>JWT</strong>.</li>
+<li><strong>Session</strong> ID is a random <strong>UUID</strong>.</li>
+<li><strong>Session</strong> ID is passed as <code>x-session-id</code>.</li>
+<li><strong>Redis</strong> stores <code>session:&lt;id&gt;</code> to <code>student:&lt;USN&gt;</code> or <code>proctor:&lt;ID&gt;</code>.</li>
+<li><strong>Session</strong> <strong>TTL</strong> is 30 days and refreshed in middleware.</li>
+<li>Logout deletes <strong>session</strong> and reverse mapping.</li>
+<li>Proctor passwords are <strong>bcrypt</strong> hashed.</li>
+<li>Student login uses USN plus DOB.</li></ul>
+<h3 id="middleware-chain-to-revise">Middleware Chain To Revise</h3>
+<ul><li><code>cors()</code></li>
+<li><code>express.json()</code></li>
+<li>route-specific <code>requireSession</code></li>
+<li>router-level <code>verifySession</code> for proctor and notifications</li>
+<li>global <code>errorHandler</code></li></ul>
+<h3 id="important-db-relationships">Important DB Relationships</h3>
+<ul><li><code>Student.usn</code> is <strong>primary key</strong>.</li>
+<li><code>Proctor.proctor_id</code> is <strong>primary key</strong>.</li>
+<li><code>Parent</code> uses composite key <code>(usn, relation)</code>.</li>
+<li><code>ProctorStudentMap</code> joins proctors and students.</li>
+<li>Unique assignment: <code>(student_id, academic_year)</code>.</li>
+<li><code>Student.details</code> is <strong>JSONB</strong> academic payload.</li></ul>
+<h3 id="important-service-interactions">Important Service Interactions</h3>
+<ul><li><strong>Express</strong> -&gt; <strong>Redis</strong> for <strong>sessions</strong>.</li>
+<li><strong>Express</strong> -&gt; <strong>Prisma</strong>/<strong>Postgres</strong> for app data.</li>
+<li><strong>Express</strong> -&gt; <strong>FastAPI</strong> for AI remark and <strong>RAG</strong> sync.</li>
+<li><strong>FastAPI</strong> -&gt; <strong>Postgres</strong> for <strong>RAG</strong> data and <strong>PGVector</strong>.</li>
+<li><strong>Express</strong> -&gt; college portal through <strong>Puppeteer</strong>/<strong>Axios</strong>.</li>
+<li><strong>Express</strong> -&gt; <strong>Cloudinary</strong> and <strong>Resend</strong> for report delivery.</li>
+<li><strong>Express</strong> -&gt; <strong>Twilio</strong> for <strong>WhatsApp</strong> if configured.</li>
+<li>Frontend -&gt; <strong>FastAPI</strong> directly for <strong>RAG</strong> chat currently.</li></ul>
+<h3 id="important-async-flows">Important Async Flows</h3>
+<ul><li><strong>Puppeteer</strong> login and navigation.</li>
+<li><strong>Axios</strong> parallel fetches for unique portal URLs.</li>
+<li>Student sync loop with <strong>Prisma</strong> upserts.</li>
+<li>Fire-and-forget <strong>RAG</strong> sync notification.</li>
+<li><strong>FastAPI</strong> background task for <strong>RAG</strong> sync.</li>
+<li>Sequential extension-driven batch scraping.</li>
+<li>Sequential parent email sending with per-parent result capture.</li></ul>
+<h3 id="docker-and-deployment-points">Docker And Deployment Points</h3>
+<ul><li>No <strong>Dockerfile</strong> or <strong>docker-compose</strong> currently exists.</li>
+<li>Local startup uses <code>start-all.bat</code> / <code>run.bat</code>.</li>
+<li><strong>Express</strong> default port is <code>5000</code>, but frontend defaults to <code>5001</code>; <strong>Express</strong> <code>.env</code> must set <code>PORT=5001</code> for local dev to work.</li>
+<li><strong>FastAPI</strong> runs on <code>127.0.0.1</code> in <code>main.py</code>.</li>
+<li>Production should containerize <strong>Express</strong> and <strong>FastAPI</strong> separately.</li>
+<li><strong>FastAPI</strong> should be private behind <strong>Express</strong> or internal networking.</li>
+<li>Run <strong>Prisma</strong> migrations in <strong>CI/CD</strong>.</li>
+<li>Add <strong>health checks</strong> for <strong>Express</strong>, <strong>FastAPI</strong>, <strong>Redis</strong>, <strong>Postgres</strong>.</li></ul>
+<h3 id="common-interviewer-traps">Common Interviewer Traps</h3>
+<ul><li>Do not say <strong>JWT</strong>. Say <strong>Redis</strong>-backed opaque <strong>sessions</strong>.</li>
+<li>Do not call it pure microservices. Say two-service architecture or distributed monolith.</li>
+<li>Do not claim admin <strong>auth</strong> is production-secure.</li>
+<li>Do not claim <strong>FastAPI</strong> <strong>RAG</strong> is protected.</li>
+<li>Do not claim <strong>Docker</strong> is implemented.</li>
+<li>Do not claim full rate limiting exists.</li>
+<li>Do not claim there is strong automated testing.</li>
+<li>Do not hide the <strong>authorization</strong> gap.</li>
+<li>Do not say <strong>JSONB</strong> is always better than relational tables.</li>
+<li>Do not say scraping is scalable as-is.</li></ul>
+<h3 id="weak-areas-interviewers-may-attack">Weak Areas Interviewers May Attack</h3>
+<ul><li>Public admin backend routes.</li>
+<li>Client-side admin password.</li>
+<li>Direct frontend calls to <strong>FastAPI</strong> <strong>RAG</strong>.</li>
+<li>Missing role and ownership <strong>authorization</strong>.</li>
+<li><strong>Session</strong> IDs in localStorage.</li>
+<li>No <strong>CSRF</strong>/<strong>XSS</strong> hardening story.</li>
+<li>No queue for scraper/PDF/email.</li>
+<li>No full <strong>rate limiter</strong>.</li>
+<li>No <strong>Docker</strong> production setup.</li>
+<li>No automated tests.</li>
+<li>Legacy schema files: <code>init_postgres.js</code>, duplicate student routes. Note: <code>seed.js</code> is still referenced in <code>prisma.config.ts</code> and <code>package.json</code>.</li>
+<li><strong>RAG</strong> sync drops vector tables.</li></ul>
+<h3 id="production-improvements-to-mention-confidently">Production Improvements To Mention Confidently</h3>
+<ul><li>Add <code>requireRole</code> and ownership middleware.</li>
+<li>Protect admin APIs with backend <strong>auth</strong>.</li>
+<li>Proxy all <strong>FastAPI</strong> calls through <strong>Express</strong> or <strong>service-to-service</strong> <strong>auth</strong>.</li>
+<li>Move scraping to <strong>Redis</strong> queue workers.</li>
+<li>Move PDF/email/<strong>WhatsApp</strong> to background jobs.</li>
+<li>Add DB <strong>index</strong> on <code>(proctor_id, academic_year)</code>.</li>
+<li>Add <strong>transactions</strong> for bulk assignment and proctor deletion.</li>
+<li>Add <strong>structured logging</strong> and <strong>request IDs</strong>.</li>
+<li>Add centralized validation.</li>
+<li>Add Dockerfiles and <strong>CI/CD</strong>.</li>
+<li>Add test suite with mocked external services.</li>
+<li>Restrict <strong>CORS</strong>.</li>
+<li>Use <strong>httpOnly</strong> <strong>secure cookies</strong> or stronger token storage.</li></ul>
+<h3 id="backend-terms-to-use">Backend Terms To Use</h3>
+<ul><li><strong>opaque session ID</strong></li>
+<li><strong>sliding TTL</strong></li>
+<li><strong>RBAC</strong></li>
+<li>ownership <strong>authorization</strong></li>
+<li><strong>JSONB</strong></li>
+<li><strong>composite unique constraint</strong></li>
+<li>transaction</li>
+<li>idempotency</li>
+<li><strong>connection pooling</strong></li>
+<li>background worker</li>
+<li>queue</li>
+<li><strong>retry with backoff</strong></li>
+<li><strong>circuit breaker</strong></li>
+<li><strong>structured logging</strong></li>
+<li>request correlation ID</li>
+<li>metadata-filtered retrieval</li>
+<li><strong>vector store</strong></li>
+<li><strong>BM25</strong></li>
+<li><strong>semantic retrieval</strong></li>
+<li>materialized summary</li></ul>
+<h2 id="4-ready-made-interview-explanations">4. Ready-Made Interview Explanations</h2>
+<h3 id="2-minute-project-explanation">2-Minute Project Explanation</h3>
+<p>MSR Insight is an academic reporting and proctoring system. My backend has two services. Express is the main API gateway: it handles student and proctor login, Redis-backed sessions, Prisma/Postgres data access, scraping academic data from the college portal, report APIs, parent email, and WhatsApp workflows. FastAPI is the intelligence service: it generates AI academic remarks using Groq and powers a RAG chatbot using Gemini, LangChain, and PGVector.</p>
+<p>The core data model has students, proctors, parents, and a proctor-student mapping per academic year. Student academic data is stored as JSONB because scraped data is semi-structured and changes with the portal. For auth, I used Redis-backed session IDs passed through <code>x-session-id</code>, not JWT. For scraping, Puppeteer logs into the portal, then Axios and Cheerio fetch and parse the actual pages more efficiently.</p>
+<p>If I were taking this to production, my first improvements would be backend admin auth, role and ownership checks, moving scraper/PDF work into queues, adding DB indexes, structured logging, tests, Docker, and protecting FastAPI behind Express.</p>
+<h3 id="5-minute-backend-focused-explanation">5-Minute Backend-Focused Explanation</h3>
+<p>The backend is split into Express and FastAPI. Express owns the product workflow. It starts in <code>server.js</code>, wires middleware and routes in <code>app.js</code>, and exposes route groups for auth, reports, proctors, notifications, student sync, and admin operations. The auth flow uses Redis-backed opaque sessions. On login, the backend creates a random UUID, stores <code>session:&lt;id&gt;</code> in Redis with the user role and identity, and the frontend sends that ID in <code>x-session-id</code> for protected requests.</p>
+<p>The database is PostgreSQL with Prisma. The main schema has <code>Student</code>, <code>Proctor</code>, <code>Parent</code>, and <code>ProctorStudentMap</code>. <code>ProctorStudentMap</code> enforces one proctor assignment per student per academic year. The student's academic data is in a JSONB <code>details</code> field. I chose that because the source data comes from scraping and includes variable subject, attendance, CIE, and exam-history structures. The tradeoff is that JSONB is less ideal for analytics and filtering, so production would add extracted summary fields and indexes.</p>
+<p>The scraping workflow is one of the more backend-heavy parts. For student login or manual update, the backend can trigger Puppeteer to authenticate against the college parent portal. After login it extracts cookies, closes the browser, and switches to Axios plus Cheerio to fetch attendance, CIE, and exam-history pages. Then a normalizer standardizes assessment labels, attendance percentages, marks, current year, CGPA, and exam history before upserting into Postgres.</p>
+<p>FastAPI handles AI workloads. Express calls <code>/generate-remark</code> for AI remarks. FastAPI validates the subject list, builds a strict two-line prompt, and calls Groq. For proctor chat, FastAPI has a RAG service. It syncs student records from Postgres, chunks each student into identity, academic, attendance, history, conduct, and misc documents, embeds them using Gemini embeddings, and stores them in PGVector. At query time it rewrites the query, detects intent, combines BM25 and vector retrieval, filters by proctor ID, and sends retrieved context to Gemini.</p>
+<p>The honest production answer is that the backend has strong architecture pieces, but the main gaps are authorization and operational hardening. Admin routes are currently public, FastAPI is directly callable, and several routes only validate that a session exists rather than checking role and ownership. Before production I would fix RBAC, protect FastAPI, move scraping and report delivery to background queues, add transactions and indexes, add observability, and containerize the services.</p>
+<h3 id="short-recruiter-friendly-explanation">Short Recruiter-Friendly Explanation</h3>
+<p>I built the backend for an AI-powered academic reporting platform. It has an Express API gateway with Redis sessions, Prisma/Postgres data models, scraping automation, report generation, email/WhatsApp delivery, and a FastAPI AI service for Groq-based remarks and Gemini/LangChain RAG chatbot features.</p>
+<h3 id="strong-backend-contribution-explanation">Strong Backend Contribution Explanation</h3>
+<p>My strongest contribution was designing the backend flow end to end: session-based auth, student/proctor APIs, the Prisma/Postgres schema, scraping and normalization, report generation, and the Express-to-FastAPI AI integration. I can also explain the production tradeoffs clearly, especially around authorization, scaling Puppeteer, JSONB design, Redis sessions, and RAG data isolation.</p>
+<h2 id="5-live-mock-interview-mode">5. Live Mock Interview Mode</h2>
+<p>Use this section when practicing. Ask one question at a time and answer out loud.</p>
+<h3 id="mock-round-1-warm-up">Mock Round 1: Warm-Up</h3>
+<p>Question 1: Explain MSR Insight from a backend perspective in two minutes.</p>
+<p>What a strong answer must include:</p>
+<ul><li><strong>Express</strong> as main <strong>API gateway</strong>.</li>
+<li><strong>FastAPI</strong> as intelligence service.</li>
+<li><strong>Redis</strong> <strong>sessions</strong>, not <strong>JWT</strong>.</li>
+<li><strong>Prisma</strong>/<strong>Postgres</strong> with <strong>JSONB</strong>.</li>
+<li>Scraper and report workflows.</li>
+<li>Honest production gaps.</li></ul>
+<p>Interviewer push:</p>
+<p>&quot;You said two services. Is this actually microservices or just a split backend?&quot;</p>
+<h3 id="mock-round-2-auth-pressure">Mock Round 2: Auth Pressure</h3>
+<p>Question 2: Walk me through proctor login from HTTP request to Redis session.</p>
+<p>Interviewer push:</p>
+<p>&quot;After session validation, how do you know that this proctor is allowed to access <code>:proctorId</code> in the URL?&quot;</p>
+<p>Expected honest answer:</p>
+<p>&quot;Currently the middleware validates session existence, but the route needs an additional ownership check. I would add middleware that requires role <code>proctor</code> and compares <code>req.user.id</code> with <code>req.params.proctorId</code>, with admin override where appropriate.&quot;</p>
+<h3 id="mock-round-3-scaling-pressure">Mock Round 3: Scaling Pressure</h3>
+<p>Question 3: What fails first if 500 proctors trigger batch scraping together?</p>
+<p>Expected answer:</p>
+<p>The scraper and external portal fail first. Puppeteer is heavy, requests are synchronous, and the portal may throttle. Move scraping into a queue with concurrency limits, backoff, retries, job status, and duplicate job prevention.</p>
+<h3 id="mock-round-4-database-pressure">Mock Round 4: Database Pressure</h3>
+<p>Question 4: Why did you store student academic data in JSONB instead of fully normalized tables?</p>
+<p>Expected answer:</p>
+<p>Because scraped data is semi-structured and changes. JSONB is flexible for subjects, attendance, CIE, and exam history. But for analytics and scale, extract frequently queried fields and add indexes/materialized summaries.</p>
+<h3 id="mock-round-5-rag-pressure">Mock Round 5: RAG Pressure</h3>
+<p>Question 5: How do you prevent a proctor from querying another proctor's students in RAG?</p>
+<p>Expected answer:</p>
+<p>Currently retrieval filters by <code>proctor_id</code>, but FastAPI trusts the request body. Production should not expose FastAPI directly. Express should validate the session and ownership, then call FastAPI with a trusted proctor ID or service token.</p>
+<h2 id="6-final-backend-evaluation">6. Final Backend Evaluation</h2>
+<h3 id="scores">Scores</h3>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">Area</th><th style="text-align:right">Score</th><th style="text-align:left">Reason</th></tr></thead><tbody><tr><td style="text-align:left">Backend engineering</td><td style="text-align:right">7.2/10</td><td style="text-align:left">Good service layering, <strong>Prisma</strong>, <strong>Redis</strong>, scraping, AI integration</td></tr>
+<tr><td style="text-align:left"><strong>API</strong> design</td><td style="text-align:right">6.8/10</td><td style="text-align:left">Clear route groups, but inconsistent <strong>auth</strong>/validation/error patterns</td></tr>
+<tr><td style="text-align:left">Scalability</td><td style="text-align:right">5.8/10</td><td style="text-align:left">Good separation, but scraper, <strong>RAG</strong> sync, and <strong>JSONB</strong> parsing need work</td></tr>
+<tr><td style="text-align:left">Security</td><td style="text-align:right">4.2/10</td><td style="text-align:left">Main weakness: admin/<strong>FastAPI</strong> exposure and missing <strong>authorization</strong> checks</td></tr>
+<tr><td style="text-align:left">Production readiness</td><td style="text-align:right">4.8/10</td><td style="text-align:left">No <strong>Docker</strong>, no tests, limited logging, no queues, broad <strong>CORS</strong></td></tr>
+<tr><td style="text-align:left">Interview readiness</td><td style="text-align:right">7.5/10</td><td style="text-align:left">Strong project if you explain tradeoffs honestly</td></tr>
+<tr><td style="text-align:left">Resume impact</td><td style="text-align:right">8.0/10</td><td style="text-align:left">AI/<strong>RAG</strong> + <strong>Redis</strong> <strong>sessions</strong> + <strong>Prisma</strong>/<strong>Postgres</strong> + scraper + reports is impressive</td></tr></tbody></table></div>
+<h3 id="strongest-backend-discussion-areas">Strongest Backend Discussion Areas</h3>
+<ul><li><strong>Express</strong> plus <strong>FastAPI</strong> architecture.</li>
+<li><strong>Redis</strong>-backed <strong>sessions</strong>.</li>
+<li><strong>PostgreSQL</strong>/<strong>Prisma</strong> schema.</li>
+<li><strong>JSONB</strong> tradeoff.</li>
+<li><strong>Puppeteer</strong> scraping pipeline.</li>
+<li>AI remark generation.</li>
+<li><strong>RAG</strong> chatbot design.</li>
+<li>Report delivery with PDF, <strong>Cloudinary</strong>, <strong>Resend</strong>, <strong>Twilio</strong>.</li></ul>
+<h3 id="weakest-backend-discussion-areas">Weakest Backend Discussion Areas</h3>
+<ul><li><strong>Authorization</strong>.</li>
+<li>Production security.</li>
+<li><strong>Docker</strong>/deployment.</li>
+<li>Automated testing.</li>
+<li>Queue-based background processing.</li>
+<li>Transaction handling.</li>
+<li>Observability.</li>
+<li><strong>FastAPI</strong> endpoint protection.</li></ul>
+<h3 id="most-likely-interviewer-concerns">Most Likely Interviewer Concerns</h3>
+<ul><li>&quot;Why are admin APIs public?&quot;</li>
+<li>&quot;How do you stop one proctor from reading another proctor's data?&quot;</li>
+<li>&quot;Why is <strong>FastAPI</strong> directly called from the frontend?&quot;</li>
+<li>&quot;What happens when <strong>Puppeteer</strong> becomes slow?&quot;</li>
+<li>&quot;Why no <strong>Docker</strong>?&quot;</li>
+<li>&quot;Why no tests?&quot;</li>
+<li>&quot;Can this scale beyond a demo?&quot;</li></ul>
+<h3 id="most-impressive-implementation-areas">Most Impressive Implementation Areas</h3>
+<ul><li>The scraper optimization: <strong>Puppeteer</strong> for login, <strong>Axios</strong>/<strong>Cheerio</strong> for page fetches.</li>
+<li><strong>Redis</strong>-backed <strong>session</strong> lifecycle.</li>
+<li><strong>RAG</strong> chunking by semantic category.</li>
+<li>Combining <strong>BM25</strong> and <strong>semantic retrieval</strong>.</li>
+<li><strong>JSONB</strong>-based academic payload storage.</li>
+<li>Parent report pipeline with PDF generation and delivery.</li></ul>
+<h3 id="what-to-improve-before-interviews">What To Improve Before Interviews</h3>
+<p>If you can make small code changes before interviews, prioritize:</p>
+<ol><li>Add backend <strong>auth</strong> to admin routes.</li>
+<li>Add role and ownership middleware.</li>
+<li>Stop frontend from calling <strong>FastAPI</strong> directly.</li>
+<li>Add indexes in <strong>Prisma</strong> schema.</li>
+<li>Add a few tests for <strong>auth</strong>, DOB formatting, and scraper normalization.</li>
+<li>Add Dockerfiles for <strong>Express</strong> and <strong>FastAPI</strong>.</li>
+<li>Clean legacy files or explain them as migration leftovers.</li></ol>
+<p>If you cannot change code before interviews, be ready to say:</p>
+<p>&quot;The system is functionally strong, but the next production milestone is security and operations: RBAC, ownership checks, FastAPI isolation, queues for heavy work, tests, Docker, and observability.&quot;</p>
+  </main>
+</body>
+</html>
