@@ -1,0 +1,20 @@
+.chrome-debug-profile/
+node_modules/
+.env
+.env.*
+.DS_Store
+
+# RAG Data
+backend/fastapi/data/chroma_db/
+backend/fastapi/data/*.json
+
+questions.md
+summary.md
+r.md
+rq.md
+.gitignore
+q.md
+to_run.md
+s.md
+
+/analysis
